@@ -1,1 +1,44 @@
-TITLE-ABS-KEY ( proptech OR "property technology" OR "real estate technology" OR "digital real estate" OR "real estate digitalization" OR "real estate digitalisation" OR "digital transformation in real estate" OR "real estate digital transformation" )
+TITLE-ABS-KEY ( proptech OR "property technology" OR "real estate technology" OR "digital real estate" 
+               OR "real estate digitalization" OR "real estate digitalisation" OR "digital transformation in real estate" 
+               OR "real estate digital transformation" )
+
+
+TITLE-ABS-KEY(
+    proptech
+    OR "prop tech"
+    OR "property technology"
+    OR "property technologies"
+    OR "real estate technology"
+    OR "real estate technologies"
+    OR "real estate tech"
+    OR "digital real estate"
+    OR "smart real estate"
+    OR "real estate digitalization"
+    OR "real estate digitalisation"
+    OR (
+        "real estate"
+        AND (
+            "digital transformation"
+            OR "technological innovation"
+            OR "digital innovation"
+        )
+    )
+)
+
+
+
+
+TITLE-ABS-KEY (
+  proptech OR "prop-tech" OR "prop tech"
+  OR "property tech*"
+  OR "real estate tech*"
+  OR "real-estate tech*"
+  OR "smart real estate"
+  OR "digital real estate"
+  OR ( ( "real estate" OR "property market*" OR housing OR "property management" )
+       W/3 ( digiti?ation OR digitali?ation OR "digital transformation" OR "digital innovation" OR "technolog* innovation" ) )
+)
+
+
+
+TITLE-ABS-KEY ( "proptech" OR "prop-tech" OR "property tech*" OR "real estate tech*" OR "real estate technology" )
