@@ -27,3 +27,18 @@ def pregunta_10():
 
     # Lectura del archivo (sin encabezado, separado por tabulaciones)
     df = pd.read_csv(ARCH_DATOS, sep = "\t")
+    
+    # Agrupar por la columna `c1`, ordenar los valores de `c2` y unirlos en un texto separado por `:`
+    df_agrupado = df.groupby("c1")["c2"].apply(lambda x: ":".join(map(str, sorted(x)))).reset_index()
+    
+    # Renombrar la columna resultante a `c2`
+    df_agrupado.columns = ["c1", "c2"]
+    
+    # Establecer la columna `c1` como índice y ordenar alfabéticamente
+    df_agrupado.set_index("c1", inplace=True)
+    
+    # Retornar el DataFrame resultante
+    return df_agrupado
+
+if __name__ == "__main__":
+    print(pregunta_10())

@@ -25,3 +25,12 @@ def pregunta_09():
 
     # Lectura del archivo (sin encabezado, separado por tabulaciones)
     df = pd.read_csv(ARCH_DATOS, sep = "\t")
+    
+    # Agregar la columna `year` al final del DataFrame, que contenga el año de la fecha de la columna `c3` como un texto de cuatro caracteres
+    df["year"] = df["c3"].astype(str).str[:4]
+    
+    # Retornar el DataFrame completo con la nueva columna
+    return df
+
+if __name__ == "__main__":
+    print(pregunta_09())

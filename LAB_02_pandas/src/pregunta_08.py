@@ -24,3 +24,12 @@ def pregunta_08():
 
     # Lectura del archivo (sin encabezado, separado por tabulaciones)
     df = pd.read_csv(ARCH_DATOS, sep = "\t")
+    
+    # Agregar la columna `suma` al final del DataFrame, cuyo valor en cada fila es `c0 + c2`
+    df["suma"] = df["c0"] + df["c2"]
+    
+    # Retornar el DataFrame completo con la nueva columna
+    return df
+
+if __name__ == "__main__":
+    print(pregunta_08())

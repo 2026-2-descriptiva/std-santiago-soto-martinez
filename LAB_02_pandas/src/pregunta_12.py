@@ -3,7 +3,7 @@ from pathlib import Path
 
 # Rutas
 DIR_DATOS = Path(__file__).resolve().parent.parent / "data"
-ARCH_DATOS = DIR_DATOS / "tbl0.tsv"
+ARCH_DATOS = DIR_DATOS / "tbl2.tsv"
 
 # Existencia de dicha ruta
 assert ARCH_DATOS.exists()
@@ -27,3 +27,18 @@ def pregunta_12():
 
     # Lectura del archivo (sin encabezado, separado por tabulaciones)
     df = pd.read_csv(ARCH_DATOS, sep = "\t")
+    
+    # Crear la columna `c5` combinando `c5a` y `c5b` en el formato `c5a:c5b`
+    df["c5"] = df["c5a"].astype(str) + ":" + df["c5b"].astype(str)
+    
+    # Agrupar por `c0`, ordenar los textos de `c5` alfabéticamente y unirlos con comas
+    df_agrupado = df.groupby("c0")["c5"].apply(lambda x: ",".join(sorted(x))).reset_index()
+    
+    # Ordenar por `c0` en orden ascendente
+    df_agrupado = df_agrupado.sort_values("c0").reset_index(drop=True)
+    
+    # Retornar el DataFrame resultante
+    return df_agrupado
+
+if __name__ == "__main__":
+    print(pregunta_12())
