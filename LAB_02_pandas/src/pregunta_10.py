@@ -1,3 +1,13 @@
+import pandas as pd
+from pathlib import Path
+
+# Rutas
+DIR_DATOS = Path(__file__).resolve().parent.parent / "data"
+ARCH_DATOS = DIR_DATOS / "tbl0.tsv"
+
+# Existencia de dicha ruta
+assert ARCH_DATOS.exists()
+
 def pregunta_10():
     """
     Usando `data/tbl0.tsv`, construya para cada categoría de la columna `c1`
@@ -15,4 +25,5 @@ def pregunta_10():
         ...
     """
 
-    raise NotImplementedError
+    # Lectura del archivo (sin encabezado, separado por tabulaciones)
+    df = pd.read_csv(ARCH_DATOS, sep = "\t")

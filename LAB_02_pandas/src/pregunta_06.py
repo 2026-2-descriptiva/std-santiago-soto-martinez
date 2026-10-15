@@ -1,3 +1,13 @@
+import pandas as pd
+from pathlib import Path
+
+# Rutas
+DIR_DATOS = Path(__file__).resolve().parent.parent / "data"
+ARCH_DATOS = DIR_DATOS / "tbl0.tsv"
+
+# Existencia de dicha ruta
+assert ARCH_DATOS.exists()
+
 def pregunta_06():
     """
     Usando `data/tbl1.tsv`, obtenga los valores distintos de la columna `c4`,
@@ -9,4 +19,5 @@ def pregunta_06():
         ["A", "B", "C", "D", "E", "F", "G"]
     """
 
-    raise NotImplementedError
+    # Lectura del archivo (sin encabezado, separado por tabulaciones)
+    df = pd.read_csv(ARCH_DATOS, sep = "\t")

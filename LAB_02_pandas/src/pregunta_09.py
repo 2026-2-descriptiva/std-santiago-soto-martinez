@@ -1,3 +1,13 @@
+import pandas as pd
+from pathlib import Path
+
+# Rutas
+DIR_DATOS = Path(__file__).resolve().parent.parent / "data"
+ARCH_DATOS = DIR_DATOS / "tbl0.tsv"
+
+# Existencia de dicha ruta
+assert ARCH_DATOS.exists()
+
 def pregunta_09():
     """
     Retorne la tabla `data/tbl0.tsv` completa con una columna adicional
@@ -13,4 +23,5 @@ def pregunta_09():
         ...
     """
 
-    raise NotImplementedError
+    # Lectura del archivo (sin encabezado, separado por tabulaciones)
+    df = pd.read_csv(ARCH_DATOS, sep = "\t")
