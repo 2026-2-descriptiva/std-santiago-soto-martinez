@@ -27,7 +27,9 @@ def pregunta_07():
     df = pd.read_csv(ARCH_DATOS, sep = "\t")
     
     # Sumar los valores de la columna `c2` para cada categoría de la columna `c1` y ordenamiento alfabético
-    suma_por_categoria = df.groupby("c1")["c2"].sum().sort_index
+    suma_por_categoria = df.groupby("c1")["c2"].sum()
+    
+    
     
     # Convertir a Serie de Pandas
     return suma_por_categoria
