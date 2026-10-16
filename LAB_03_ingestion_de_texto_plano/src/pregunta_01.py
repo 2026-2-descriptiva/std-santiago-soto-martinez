@@ -1,3 +1,14 @@
+import os.path
+import re
+import pandas as pd
+
+# Rutas
+#DIR_DATOS = os.path.dirname(__file__) + "/../data"
+#ARCH_DATOS = os.path.join(DIR_DATOS, "clusters_report.txt")
+
+# Existencia de dicha ruta
+#assert os.path.exists(ARCH_DATOS)
+
 def pregunta_01():
     """
     El archivo `data/clusters_report.txt` es un reporte de clústeres de
@@ -26,4 +37,53 @@ def pregunta_01():
         ...
     """
 
-    raise NotImplementedError
+    ruta = (
+        r"C:\Users\santi\OneDrive - Universidad Nacional de Colombia"
+        r"\Documentos\Semestre 1\Descriptiva\std-santiago-soto-martinez"
+        r"\LAB_03_ingestion_de_texto_plano\data\clusters_report.txt"
+    )
+
+    patron_inicio = re.compile(r"^\s*(\d+)\s+(\d+)\s+(\d+,\d+)\s*%\s*(.*)$")
+
+    filas = []
+    actual = None
+
+    with open(ruta, encoding="utf-8") as archivo:
+        for linea in archivo:
+            linea = linea.rstrip("\n")
+
+            coincidencia = patron_inicio.match(linea)
+            if coincidencia:
+                actual = {
+                    "cluster": int(coincidencia.group(1)),
+                    "cantidad_de_palabras_clave": int(coincidencia.group(2)),
+                    "porcentaje_de_palabras_clave": float(
+                        coincidencia.group(3).replace(",", ".")
+                    ),
+                    "principales_palabras_clave": coincidencia.group(4).strip(),
+                }
+                filas.append(actual)
+            elif actual and linea.strip() and not linea.strip().startswith("-"):
+                # Línea de continuación de las palabras clave del clúster
+                actual["principales_palabras_clave"] += " " + linea.strip()
+
+    # Normalizar el texto de palabras clave
+    for fila in filas:
+        texto = re.sub(r"\s+", " ", fila["principales_palabras_clave"]).strip()
+        texto = texto.rstrip(".")
+        palabras = [p.strip() for p in texto.split(",") if p.strip()]
+        fila["principales_palabras_clave"] = ", ".join(palabras)
+
+    return pd.DataFrame(
+        filas,
+        columns=[
+            "cluster",
+            "cantidad_de_palabras_clave",
+            "porcentaje_de_palabras_clave",
+            "principales_palabras_clave",
+        ],
+    )
+    
+if __name__ == "__main__":
+    print(pregunta_01())
+
