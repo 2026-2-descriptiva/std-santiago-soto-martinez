@@ -2,13 +2,6 @@ import os.path
 import re
 import pandas as pd
 
-# Rutas
-#DIR_DATOS = os.path.dirname(__file__) + "/../data"
-#ARCH_DATOS = os.path.join(DIR_DATOS, "clusters_report.txt")
-
-# Existencia de dicha ruta
-#assert os.path.exists(ARCH_DATOS)
-
 def pregunta_01():
     """
     El archivo `data/clusters_report.txt` es un reporte de clústeres de
@@ -37,17 +30,21 @@ def pregunta_01():
         ...
     """
 
+    # Rutas y patrones para procesar el archivo de reporte
     ruta = (
         r"C:\Users\santi\OneDrive - Universidad Nacional de Colombia"
         r"\Documentos\Semestre 1\Descriptiva\std-santiago-soto-martinez"
         r"\LAB_03_ingestion_de_texto_plano\data\clusters_report.txt"
     )
 
+    # Patrón para identificar el inicio de un clúster en el reporte
     patron_inicio = re.compile(r"^\s*(\d+)\s+(\d+)\s+(\d+,\d+)\s*%\s*(.*)$")
 
+    # Lista para almacenar las filas del DataFrame y variable para el clúster actual
     filas = []
     actual = None
 
+    # Leer el archivo línea por línea y extraer la información de cada clúster
     with open(ruta, encoding="utf-8") as archivo:
         for linea in archivo:
             linea = linea.rstrip("\n")
@@ -74,6 +71,7 @@ def pregunta_01():
         palabras = [p.strip() for p in texto.split(",") if p.strip()]
         fila["principales_palabras_clave"] = ", ".join(palabras)
 
+    # Crear el DataFrame y retornarlo
     return pd.DataFrame(
         filas,
         columns=[
