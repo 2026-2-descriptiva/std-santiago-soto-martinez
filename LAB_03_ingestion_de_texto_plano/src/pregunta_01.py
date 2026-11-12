@@ -1,6 +1,6 @@
-import os.path
 import re
 import pandas as pd
+from pathlib import Path
 
 def pregunta_01():
     """
@@ -30,57 +30,47 @@ def pregunta_01():
         ...
     """
 
-    # Rutas y patrones para procesar el archivo de reporte
-    ruta = (
-        r"C:\Users\santi\OneDrive - Universidad Nacional de Colombia"
-        r"\Documentos\Semestre 1\Descriptiva\std-santiago-soto-martinez"
-        r"\LAB_03_ingestion_de_texto_plano\data\clusters_report.txt"
-    )
+    arch = Path(__file__).resolve().parent.parent / "data" / "clusters_report.txt"
+    assert arch.exists()
 
-    # Patrón para identificar el inicio de un clúster en el reporte
-    patron_inicio = re.compile(r"^\s*(\d+)\s+(\d+)\s+(\d+,\d+)\s*%\s*(.*)$")
+    # Línea que inicia un clúster: número, cantidad, porcentaje y primer texto
+    patron = re.compile(r"^\s*(\d+)\s+(\d+)\s+(\d+(?:,\d+)?)\s*%\s*(.*)$")
 
-    # Lista para almacenar las filas del DataFrame y variable para el clúster actual
     filas = []
-    actual = None
+    en_datos = False
+    with open(arch, encoding="utf-8-sig") as f:
+        for linea in f:
+            linea = linea.rstrip("\r\n")
+            # Los datos empiezan después de la línea de guiones
+            if not en_datos:
+                en_datos = linea.strip().startswith("---")
+                continue
+            if not linea.strip():
+                continue
+            m = patron.match(linea)
+            if m:
+                filas.append(
+                    {
+                        "cluster": int(m.group(1)),
+                        "cantidad_de_palabras_clave": int(m.group(2)),
+                        "porcentaje_de_palabras_clave": float(
+                            m.group(3).replace(",", ".")
+                        ),
+                        "texto": m.group(4),
+                    }
+                )
+            elif filas:
+                # Línea de continuación de las palabras clave
+                filas[-1]["texto"] += " " + linea
 
-    # Leer el archivo línea por línea y extraer la información de cada clúster
-    with open(ruta, encoding="utf-8") as archivo:
-        for linea in archivo:
-            linea = linea.rstrip("\n")
-
-            coincidencia = patron_inicio.match(linea)
-            if coincidencia:
-                actual = {
-                    "cluster": int(coincidencia.group(1)),
-                    "cantidad_de_palabras_clave": int(coincidencia.group(2)),
-                    "porcentaje_de_palabras_clave": float(
-                        coincidencia.group(3).replace(",", ".")
-                    ),
-                    "principales_palabras_clave": coincidencia.group(4).strip(),
-                }
-                filas.append(actual)
-            elif actual and linea.strip() and not linea.strip().startswith("-"):
-                # Línea de continuación de las palabras clave del clúster
-                actual["principales_palabras_clave"] += " " + linea.strip()
-
-    # Normalizar el texto de palabras clave
+    # Normalización de las palabras clave de cada clúster
     for fila in filas:
-        texto = re.sub(r"\s+", " ", fila["principales_palabras_clave"]).strip()
-        texto = texto.rstrip(".")
+        texto = re.sub(r"\s+", " ", fila["texto"]).strip().rstrip(".")
         palabras = [p.strip() for p in texto.split(",") if p.strip()]
         fila["principales_palabras_clave"] = ", ".join(palabras)
+        del fila["texto"]
 
-    # Crear el DataFrame y retornarlo
-    return pd.DataFrame(
-        filas,
-        columns=[
-            "cluster",
-            "cantidad_de_palabras_clave",
-            "porcentaje_de_palabras_clave",
-            "principales_palabras_clave",
-        ],
-    )
+    return pd.DataFrame(filas)
     
 if __name__ == "__main__":
     print(pregunta_01())
