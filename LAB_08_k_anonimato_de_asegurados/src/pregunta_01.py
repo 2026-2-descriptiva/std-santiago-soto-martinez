@@ -86,10 +86,10 @@ def pregunta_01():
         }
     """
 
-    """
-    Mide el riesgo de reidentificación de data/insurance.csv.gz, evalúa dos
-    esquemas de generalización y publica el que suprime menos registros.
-    """
+    
+    #Mide el riesgo de reidentificación de data/insurance.csv.gz, evalúa dos
+    #esquemas de generalización y publica el que suprime menos registros.
+    
     K = 5
     raiz = Path(__file__).resolve().parent.parent
     arch_datos = raiz / "data" / "insurance.csv.gz"
